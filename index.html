@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RBAC Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(120deg, #6a11cb, #2575fc);
+            color: #fff;
+        }
+        header {
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+            background: #333;
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .search-bar input {
+            width: 80%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+        }
+        .dashboard-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        .stat-card {
+            flex: 1;
+            background: #444;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        .stat-card h2 {
+            font-size: 2rem;
+        }
+        .stat-card p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: #fff;
+            color: #333;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+        .card-header {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .card-content button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1.2rem;
+            background: #6a11cb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .card-content button:hover {
+            background: #2575fc;
+        }
+        .card-content button[title]:hover:after {
+            content: attr(title);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            position: absolute;
+            padding: 5px 10px;
+            border-radius: 5px;
+            top: -40px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #333;
+            color: #fff;
+            font-size: 1rem;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .modal.active {
+            display: block;
+        }
+        .modal-header {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .modal input, .modal select, .modal button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .modal button {
+            background: #2575fc;
+            color: #fff;
+            cursor: pointer;
+        }
+        .modal button:hover {
+            background: #6a11cb;
+        }
+    </style>
+</head>
+<body>
+    <header>RBAC Admin Dashboard</header>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" placeholder="Search Users, Roles, or Permissions...">
+        </div>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h2>120</h2>
+                <p>Active Users</p>
+            </div>
+            <div class="stat-card">
+                <h2>35</h2>
+                <p>Roles Defined</p>
+            </div>
+            <div class="stat-card">
+                <h2>240</h2>
+                <p>Permissions Assigned</p>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">User Management</div>
+                <div class="card-content">
+                    <button title="Add a new user to the system" onclick="openModal('Add User')">Add User</button>
+                    <button title="Edit an existing user's details" onclick="openModal('Edit User')">Edit User</button>
+                    <button title="Remove a user from the system" onclick="openModal('Delete User')">Delete User</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Role Management</div>
+                <div class="card-content">
+                    <button title="Define a new role" onclick="openModal('Add Role')">Add Role</button>
+                    <button title="Modify an existing role" onclick="openModal('Edit Role')">Edit Role</button>
+                    <button title="Delete an unwanted role" onclick="openModal('Delete Role')">Delete Role</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Permission Settings</div>
+                <div class="card-content">
+                    <button title="Assign permissions to roles" onclick="openModal('Assign Permissions')">Assign Permissions</button>
+                    <button title="View existing permissions" onclick="openModal('View Permissions')">View Permissions</button>
+                    <button title="Modify role permissions" onclick="openModal('Edit Permissions')">Edit Permissions</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>VRV Security &copy; 2024 | All Rights Reserved</footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-header">Action</div>
+        <form>
+            <input type="text" placeholder="Enter Name">
+            <input type="email" placeholder="Enter Email">
+            <select>
+                <option>Select Role</option>
+                <option>Admin</option>
+                <option>Editor</option>
+                <option>Viewer</option>
+            </select>
+            <button type="button" onclick="closeModal()">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function openModal(action) {
+            const modal = document.getElementById('modal');
+            modal.querySelector('.modal-header').textContent = action;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
